@@ -1,5 +1,5 @@
 import type { LoaderFunction } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData } from "@remix-run/react";
 
 type Unconf = {
   userId: number;
@@ -23,9 +23,7 @@ const ListIndex = () => {
       <h1 className="text-red-600">UnConference List</h1>
       <main>
         <ul>
-          {posts.map(post => (
-            <li key={post.id}>{post.title}</li>
-          ))}
+          {posts.map(post => <li key={post.id}><Link to="slug">{post.title}</Link></li>)}
         </ul>
       </main>
     </>
