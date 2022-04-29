@@ -1,30 +1,45 @@
 import type { LoaderFunction } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 
+type Host = {
+  id: number;
+  name: string;
+  address: string;
+  city: string;
+};
 type Unconf = {
-  userId: number;
   id: number;
   title: string;
-  body: string;
+  datetime: string;
+  host: Host;
 };
 type UnconfArr = Array<Unconf>;
+type UnconfCardProps = { unconf: Unconf };
 
 export const loader: LoaderFunction = async () => {
-  const data: UnconfArr = await (await fetch('https://jsonplaceholder.typicode.com/posts')).json();
+  const data: UnconfArr = await (await fetch('https://ritz.selectnull.com/api/events')).json();
 
   return data;
 };
 
+const UnconfCard = ({ unconf }: UnconfCardProps) => (
+  <li className="mt-4">
+    <div className="text-gray-900 font-bold text-xl text-center">{unconf.title}</div>
+    <div className="text-gray-700">{unconf.datetime} | @{unconf.host.name}</div>
+  </li>
+);
+
 const ListIndex = () => {
-  const posts = useLoaderData<UnconfArr>();
+  const events = useLoaderData<UnconfArr>();
 
   return (
     <>
-      <h1 className="text-red-600">UnConference List</h1>
+      <h1 className="text-4xl text-center font-black my-8">UnConference List</h1>
       <main>
-        <ul>
-          {posts.map(post => <li key={post.id}><Link to="slug">{post.title}</Link></li>)}
+        <ul className="flex flex-col items-center">
+          {events.map(event => <UnconfCard key={event.id} unconf={event} />)}
         </ul>
+        <Link to="/">home</Link>
       </main>
     </>
   )
